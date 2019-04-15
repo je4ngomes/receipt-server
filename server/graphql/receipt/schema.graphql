@@ -1,4 +1,13 @@
+type Query {
 
+}
+
+type Mutation {
+    createReceipt(data: createReceiptInput): Receipt!
+    updateReceipt(data: updateReceiptInput): Receipt!
+    deleteReceipt(id: ID!): Receipt!
+    deleteManyReceipt(ids: [ID!]!): [Receipt!]!,
+}
 
 type Receipt {
     expiresAt: String!,
@@ -11,4 +20,28 @@ type Receipt {
     type: String!,
     paidStatus: Boolean!,
     owner: String!
+}
+
+input createReceiptInput {
+    expiresAt: String!,
+    createdAt: String!,
+    description: String!,
+    amount: Float!,
+    paymentProofFile: Upload!,
+    from: String!,
+    category: String!,
+    type: String!,
+    paidStatus: Boolean!,
+}
+
+input updateReceiptInput {
+    expiresAt: String,
+    createdAt: String,
+    description: String,
+    amount: Float,
+    paymentProofFile: Upload,
+    from: String,
+    category: String,
+    type: String,
+    paidStatus: Boolean,
 }

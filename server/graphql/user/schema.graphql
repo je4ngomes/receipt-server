@@ -1,11 +1,25 @@
 type Query {
+    me: User!
+}
 
+type Mutation {
+    updateUser(id: ID!, data: updateUserInput): User!
+    signIn(data: signInUserInput): User!
 }
 
 type User {
     id: ID!
     name: String!
+    username: String!
     email: String!
     company: String
     receipts: [Receipt!]!
+}
+
+input updateUserInput {
+    name: String,
+    username: String,
+    email: String,
+    company: String,
+    password: String
 }

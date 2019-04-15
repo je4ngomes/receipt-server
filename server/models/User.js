@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
 const User = mongoose.Schema({
+    name: String,
+    company: String,
     username: {
         type: String,
         required: true
@@ -9,7 +11,6 @@ const User = mongoose.Schema({
         type: String,
         required: true
     },
-    company: String,
     recepts: [Recepts]
 });
 
