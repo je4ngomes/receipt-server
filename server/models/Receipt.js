@@ -13,4 +13,4 @@ const Receipt = mongoose.Schema({
     _user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
-mongoose.model('Receipt', Receipt);
+mongoose.model('receipt', Receipt);

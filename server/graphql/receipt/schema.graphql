@@ -1,5 +1,10 @@
 type Query {
-
+    receipt(id: ID!): Receipt!
+    receipts(
+        first: Int,
+        skip: Int
+        after: ID!
+    ): [Receipt!]!
 }
 
 type Mutation {

@@ -14,4 +14,4 @@ const User = mongoose.Schema({
     recepts: [Recepts]
 });
 
-mongoose.model('User', User);
+mongoose.model('user', User);
