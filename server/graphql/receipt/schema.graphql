@@ -25,7 +25,7 @@ type Receipt {
     category: String!,
     type: String!,
     paidStatus: Boolean!,
-    owner: String!
+    creator: User!
 }
 
 input createReceiptInput {
@@ -33,11 +33,11 @@ input createReceiptInput {
     createdAt: String!,
     description: String!,
     amount: Float!,
-    paymentProofFile: Upload!,
+    paymentProofFile: Upload,
     from: String!,
     category: String!,
     type: String!,
-    paidStatus: Boolean!,
+    paidStatus: Boolean,
 }
 
 input updateReceiptInput {

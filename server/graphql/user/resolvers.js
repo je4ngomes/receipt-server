@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
-import { formatUserAuthPayload, formatUserObj } from '../../middlewares/utils';
+import { formatUserAuthPayload } from '../../utils/utils';
 import { AuthenticationError } from '../errors';
 
 const User = mongoose.model('user');
 
 const me = (parent, args, { req }) => 
-    User.findById(req.user.id).then(formatUserObj);
+    User.findById(req.user.id);
 
 const signIn = (parent, { data }, ctx) => {
     const { username, password } = data;
-
+    
     return User.findUserByCredentials(username, password)
         .then(user => {
             if (!user)
@@ -31,7 +31,7 @@ const updateUser = (parent, { id: _id, data }, ctx) => {
     return User.findOneAndUpdate(
         { _id }, 
         { $set: { ...data } }, { new: true }
-    ).then(formatUserObj);
+    );
 };
 
 export default {

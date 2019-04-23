@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import autoPopulate from 'mongoose-autopopulate'
 
 const Receipt = mongoose.Schema({
     expiresAt: { type: Date, required: true },
@@ -10,7 +11,9 @@ const Receipt = mongoose.Schema({
     category: { type: String, required: true },
     type: { type: String, required: true },
     paidStatus: { type: Boolean, default: true },
-    _user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }
 });
+
+Receipt.plugin(autoPopulate)
 
 mongoose.model('receipt', Receipt);

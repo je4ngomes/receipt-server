@@ -8,10 +8,10 @@ const validateUserInput = (resolve, parent, { data }) => {
     const keys = Object.keys(data);
     const validations = pick(
         keys, 
-        { password: ["Password must be 8 characters or longer.", (x) => x.length >= 8],
-          email: ["Invalid email address", validator.isEmail ],
-          username: ["Invalid email address", validator.notEmpty ],
-          name: ['Name is required', validator.notEmpty] }
+        { password: [{ error: "Password must be 8 characters or longer.", validator: (x) => x.length >= 8 }],
+          email: [{ error: "Invalid email address", validator: validator.isEmail } ],
+          username: [{ error: "Invalid email address", validator: validator.notEmpty } ],
+          name: [{ error: 'Name is required', validator: validator.notEmpty }] }
     );
     
     const results = validate(data, validations);
@@ -31,7 +31,7 @@ const authenticationRequired = (...args) => {
     return resolve();
 };
 
-const all_parseJWT = (...args) => {
+const parseJWTFromRequest = (...args) => {
     const [resolve,,, { req }] = args;
     const { request, connection = {} } = req;
 
@@ -46,7 +46,8 @@ const all_parseJWT = (...args) => {
             ? connection.context.Authorization
             : null
 
-    req.user = token && jwt.verify(token.slice(7), '123456'); // remove `Bearer` word from token and verify it.
+    // remove `Bearer` word from token and verify it.
+    req.user = token && jwt.verify(token.slice(7), '123456'); 
     req.isAuthenticated = !!req.user; // cast to bool
 
     return resolve(); 
@@ -54,8 +55,8 @@ const all_parseJWT = (...args) => {
 
 const fieldValidations = {
     Mutation: {
-        signUp: validateUserInput,
-        updateUser: validateUserInput
+        // signUp: validateUserInput,
+        // updateUser: validateUserInput
     }
 
 };
@@ -70,7 +71,7 @@ const authRequired = {
 };
 
 export {
-    all_parseJWT,
+    parseJWTFromRequest,
     fieldValidations,
     authRequired
 };

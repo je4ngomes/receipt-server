@@ -23,6 +23,7 @@
     "jsonwebtoken": "^8.5.1",
     "merge-graphql-schemas": "^1.5.8",
     "mongoose": "^5.4.20",
+    "mongoose-autopopulate": "^0.9.1",
     "ramda": "^0.26.1",
     "validator": "^10.10.0",
     "validator-handler": "^1.0.6"

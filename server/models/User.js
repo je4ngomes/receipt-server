@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-
-import Receipt from './Receipt';
+import autoPopulate from 'mongoose-autopopulate';
 
 const User = mongoose.Schema({
     name: String,
@@ -16,17 +15,20 @@ const User = mongoose.Schema({
         unique: true,
         required: true
     },
-    password: String,
-    receipts: [Receipt]
+    password: { type: String, select: false },
+    receipts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Receipt', autopopulate: true }]
 });
+
+// User.plugin(autoPopulate);
 
 User.statics.findUserByCredentials = function(username, password) {
     const User = this;
 
     return User.findOne({ username })
+        .select('+password')
         .then(user => {
             if (!user) return Promise.reject();
-
+  
             return bcrypt.compare(password, user.password)
                     .then(result => {
                         if (result)
@@ -50,5 +52,6 @@ User.pre('save', function(next) {
     }
     next();
 });
+
 
 mongoose.model('user', User);
