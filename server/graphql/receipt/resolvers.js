@@ -11,9 +11,15 @@ const receipts = (parent, args, { req }) =>
 
 const createReceipt = (parent, { data }, { req }) => {
     console.log(req.user.id);
-    new Receipt({ ...data, creator: req.user.id })
+
+    return new Receipt({ ...data, creator: req.user.id })
         .save()
-        .then(receipt => User.updateOne({ _id: req.user.id }, { $push: receipt.id }));
+        .then(receipt => { 
+            User.updateOne({ _id: req.user.id }, { $push: { receipts: receipt.id } })
+
+            return receipt;
+        })
+        .catch(e => console.error(e));
 }
 
 const updateReceipt = (parent, { data }, { req }) => {

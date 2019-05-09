@@ -4,7 +4,7 @@ type Query {
     receipts(
         first: Int,
         skip: Int
-        after: ID!
+        after: ID
     ): [Receipt!]!
 }
 
@@ -16,6 +16,7 @@ type Mutation {
 }
 
 type Receipt {
+    id: ID!
     expiresAt: String!,
     createdAt: String!,
     description: String!,
