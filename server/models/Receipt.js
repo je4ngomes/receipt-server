@@ -14,6 +14,6 @@ const Receipt = mongoose.Schema({
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'user', autopopulate: true }
 });
 
-Receipt.plugin(autoPopulate)
+Receipt.plugin(autoPopulate);
 
 mongoose.model('receipt', Receipt);

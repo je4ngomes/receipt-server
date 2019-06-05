@@ -3,8 +3,8 @@ import { formatError } from 'apollo-errors';
 
 // set and load database configuration
 import './config/db';
-import './models/Receipt';
 import './models/User';
+import './models/Receipt';
 
 import mergeGraphql from './utils/mergeGraphql';
 import { parseJWTFromRequest, authRequired, fieldValidations } from './middlewares/graphql';

@@ -19,7 +19,7 @@ const User = mongoose.Schema({
     receipts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'receipt', autopopulate: true }]
 });
 
-// User.plugin(autoPopulate);
+User.plugin(autoPopulate);
 
 User.statics.findUserByCredentials = function(username, password) {
     const User = this;

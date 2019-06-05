@@ -1,24 +1,28 @@
 scalar Upload
+scalar DateTime
+scalar Date
 type Query {
     receipt(id: ID!): Receipt!
     receipts(
         first: Int,
-        skip: Int
-        after: ID
+        skip: Int,
+        after: ID,
+        startDate: Date
+        endDate: Date
     ): [Receipt!]!
 }
 
 type Mutation {
     createReceipt(data: createReceiptInput): Receipt!
-    updateReceipt(data: updateReceiptInput): Receipt!
+    updateReceipt(id: ID!, data: updateReceiptInput): Receipt!
     deleteReceipt(id: ID!): Receipt!
     deleteManyReceipt(ids: [ID!]!): [Receipt!]!,
 }
 
 type Receipt {
     id: ID!
-    expiresAt: String!,
-    createdAt: String!,
+    expiresAt: Date!,
+    createdAt: DateTime!,
     description: String!,
     amount: Float!,
     urlPaymentProof: String!,

@@ -27,12 +27,11 @@ const signUp = (parent, { data }, ctx) => {
                 .then(formatUserAuthPayload);
 };
 
-const updateUser = (parent, { id: _id, data }, ctx) => {
-    return User.findOneAndUpdate(
-        { _id }, 
+const updateUser = (parent, { data }, { req }) =>
+    User.findOneAndUpdate(
+        { _id: req.user.id }, 
         { $set: { ...data } }, { new: true }
     );
-};
 
 export default {
     Query: {
