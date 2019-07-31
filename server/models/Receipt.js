@@ -2,16 +2,24 @@ import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate'
 
 const Receipt = mongoose.Schema({
-    expiresAt: { type: String, required: true },
-    createdAt: { type: String, required: true },
+    expires_date: { type: Date, required: true },
+    createdAt: { type: Date, required: true },
     description: { type: String, required: true },
-    amount: { type: Number, required: true },
-    urlPaymentProof: { type: String },
-    from: { type: String, required: true },
-    category: { type: String, required: true },
-    type: { type: String, required: true },
-    paidStatus: { type: Boolean, default: true },
-    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'user', autopopulate: true }
+    cost: { type: Number, required: true },
+    receiptType: { type: String, required: true },
+    isPaid: { type: String, required: true },
+    category: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'category', 
+        required: true,
+        autopopulate: true
+    },
+    creator: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'user',
+        required: true, 
+        autopopulate: true, 
+    }
 });
 
 Receipt.plugin(autoPopulate);

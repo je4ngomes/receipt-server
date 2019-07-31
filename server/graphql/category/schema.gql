@@ -1,0 +1,44 @@
+scalar Date
+
+enum CategoryType {
+    RECEIPT
+    FIXED
+    VARIABLE
+    PERSON
+    PAYMENT_ENTITY
+}
+
+type Query {
+    category(id: ID!): Category!
+    categories(
+        startDate: Date!,
+        endDate: Date!
+        categoryType: CategoryType,
+        currentPag: Int!,
+        limit: int!
+    ): [Category!]!
+}
+
+type Mutation {
+    createCategory(data: createCategoryInput): Category!
+    updateCategory(id: ID!, data: updateCategoryInput): Category!
+    deleteCategory(id: ID!): Category!
+    deleteManyCategory(ids: [ID!]!): [Category!]!
+}
+
+type Category {
+    id: ID!
+    name: String!
+    createdAt: Date!
+    creator: User!
+}
+
+input createCategoryInput {
+    name: String!
+    categoryType: CategoryType!
+}
+
+input updateCategoryInput {
+    name: String
+    categoryType: CategoryType
+}

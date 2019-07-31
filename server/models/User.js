@@ -16,7 +16,8 @@ const User = mongoose.Schema({
         required: true
     },
     password: { type: String, select: false },
-    receipts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'receipt', autopopulate: true }]
+    receipts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'receipt', autopopulate: true }],
+    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'category', autopopulate: true }]
 });
 
 User.plugin(autoPopulate);

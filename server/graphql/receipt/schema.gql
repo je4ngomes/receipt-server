@@ -1,0 +1,64 @@
+scalar Date
+
+enum ReceiptType {
+    RECEIPT
+    FIXED
+    VARIABLE
+    PERSON
+}
+
+enum IsReceiptPaid { 
+    YES 
+    NO 
+}
+
+type Query {
+    receipt(id: ID!): Receipt!
+    receipts(
+        startDate: Date!
+        endDate: Date!
+        receiptType: ReceiptType!
+        currentPag: Int!
+        limit: int!
+    ): [Receipt!]!
+}
+
+type Mutation {
+    createReceipt(data: createReceiptInput): Receipt!
+    updateReceipt(id: ID!, data: updateReceiptInput): Receipt!
+    deleteReceipt(id: ID!): Receipt!
+    deleteManyReceipt(ids: [ID!]!): [Receipt!]!,
+}
+
+type Receipt {
+    id: ID!
+    expires_date: Date!,
+    createdAt: Date!,
+    description: String!,
+    cost: Float!,
+    paymentEntity: ID!,
+    category: ID!,
+    receiptType: ReceiptType!,
+    isPaid: IsReceiptPaid!,
+    creator: User!
+}
+
+input createReceiptInput {
+    expires_date: Date!,
+    description: String!,
+    cost: Float!,
+    paymentEntity: ID!,
+    category: ID!,
+    receiptType: ReceiptType!,
+    isPaid: IsReceiptPaid!,
+}
+
+input updateReceiptInput {
+    expires_date: Date,
+    description: String,
+    cost: Float,
+    paymentEntity: ID,
+    category: ID,
+    receiptType: ReceiptType,
+    isPaid: IsReceiptPaid,
+}

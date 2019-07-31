@@ -4,10 +4,14 @@ import { formatError } from 'apollo-errors';
 // set and load database configuration
 import './config/db';
 import './models/User';
+import './models/Category';
 import './models/Receipt';
 
 import mergeGraphql from './utils/mergeGraphql';
-import { parseJWTFromRequest, authRequired, fieldValidations } from './middlewares/graphql';
+import { 
+    parseJWTFromRequest, 
+    authRequired, 
+    fieldValidations } from './middlewares/graphql';
 
 const { schema: typeDefs, resolvers } = mergeGraphql([{ dir: `${__dirname}/graphql/**/resolvers.js`, type: 'RESOLVERS' },
                                                       { dir: `${__dirname}/graphql/**/*.graphql`, type: 'TYPES' }])

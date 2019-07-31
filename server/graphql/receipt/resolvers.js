@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { NotFound } from '../errors';
-import { GraphQLDate, GraphQLDateTime } from 'graphql-iso-date';
+import { GraphQLDate } from 'graphql-iso-date';
 
 const Receipt = mongoose.model('receipt');
 const User = mongoose.model('user');
@@ -13,16 +13,32 @@ const receipt = (parent, { id }, { req }) =>
             return receipt;
         });
 
-const receipts = (parent, args, { req }) => {
-    console.log(args.startDate)
-    return Receipt.find({ creator: req.user.id });
+const receipts = (parent, { currentPag, limit, startDate, endDate, receiptType }, { req }) => {
+    const conditions = { 
+        creator: req.user.id,
+        receiptType,
+        createdAt: {
+            $gte: startDate,
+            $lt: endDate
+        }
+    };
+    const query = {
+        skip: limit * (currentPag - 1),
+        limit
+    };
+
+    return Receipt.find(conditions, {}, query);
 };
 
 const createReceipt = (parent, { data }, { req }) =>
-    new Receipt({ ...data, creator: req.user.id })
+    new Receipt({ 
+        ...data, 
+        creator: req.user.id, 
+        createdAt: new Date()
+    })
         .save()
         .then(async receipt => { 
-            await User.updateOne({ _id: req.user.id }, { $push: { receipts: receipt.id } })
+            await User.updateOne({ _id: req.user.id }, { $push: { receipts: receipt.id } });
             return receipt;
         });
 
@@ -31,7 +47,8 @@ const updateReceipt = (parent, { id: _id, data }, { req }) => {
         { _id, creator: req.user.id },
         { $set: { ...data } }, { new: true }
     );
-}
+};
+
 const deleteReceipt = (parent, { id: _id }, { req }) =>
     Receipt.findOneAndDelete({ _id, creator: req.user.id })
         .then(receipt => {
@@ -69,6 +86,5 @@ export default {
         deleteReceipt,
         deleteManyReceipt
     },
-    Date: GraphQLDate,
-    DateTime: GraphQLDateTime
+    Date: GraphQLDate
 };
