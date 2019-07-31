@@ -1,6 +1,7 @@
 scalar Upload
 scalar DateTime
 scalar Date
+
 type Query {
     receipt(id: ID!): Receipt!
     receipts(
