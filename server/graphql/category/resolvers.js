@@ -14,16 +14,16 @@ const category = (parent, { id }, { req }) =>
         });
 
 const categories = (parent, { currentPag, limit , categoryType }, { req }) => {
-    const conditions = { 
-        categoryType,
-        creator: req.user.id
-    };
+    const conditions = categoryType ? { categoryType } : {};
     const query = {
         skip: limit * (currentPag - 1),
         limit
     };
 
-    return Category.find(conditions, {}, query);
+    return Promise.all([
+        Category.find({ ...conditions, creator: req.user.id }, {}, query),
+        Category.countDocuments({ creator: req.user.id })
+    ]).then(([nodes, total]) => ({ nodes, total }));
 };
 
 const createCategory = (parent, { data }, { req }) =>
@@ -70,7 +70,7 @@ const deleteManyCategory = (parent, { ids }, { req }) =>
                 return doc;
             });
 
-            return deletedDocs;
+            return { nodes: deletedDocs, total: deletedDocs.length };
     });
 
 export default {

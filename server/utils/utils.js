@@ -7,7 +7,19 @@ const formatUserAuthPayload = user => ({
     token: generateToken({ id: user._id }) 
 });
 
+const applyMiddlewareToFields = (operations, middleware) => (
+    Object.entries(operations)
+        .reduce((acc, [operation, fields]) => ({
+            ...acc,
+            [operation]: fields.reduce((acc, field) => ({
+                ...acc,
+                [field]: middleware
+            }), {})
+        }), {})
+);
+
 export {
     generateToken,
+    applyMiddlewareToFields,
     formatUserAuthPayload
 };

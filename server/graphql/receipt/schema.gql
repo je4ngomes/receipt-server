@@ -15,19 +15,19 @@ enum IsReceiptPaid {
 type Query {
     receipt(id: ID!): Receipt!
     receipts(
-        startDate: Date!
-        endDate: Date!
-        receiptType: ReceiptType!
+        startDate: Date
+        endDate: Date
+        receiptType: ReceiptType
         currentPag: Int!
-        limit: int!
-    ): [Receipt!]!
+        limit: Int!
+    ): ReceiptPayload!
 }
 
 type Mutation {
     createReceipt(data: createReceiptInput): Receipt!
     updateReceipt(id: ID!, data: updateReceiptInput): Receipt!
     deleteReceipt(id: ID!): Receipt!
-    deleteManyReceipt(ids: [ID!]!): [Receipt!]!,
+    deleteManyReceipt(ids: [ID!]!): ReceiptPayload!,
 }
 
 type Receipt {
@@ -41,6 +41,11 @@ type Receipt {
     receiptType: ReceiptType!,
     isPaid: IsReceiptPaid!,
     creator: User!
+}
+
+type ReceiptPayload {
+    nodes: [Receipt!]!
+    total: Int
 }
 
 input createReceiptInput {

@@ -1,5 +1,3 @@
-scalar Date
-
 enum CategoryType {
     RECEIPT
     FIXED
@@ -11,26 +9,32 @@ enum CategoryType {
 type Query {
     category(id: ID!): Category!
     categories(
-        startDate: Date!,
-        endDate: Date!
-        categoryType: CategoryType,
-        currentPag: Int!,
-        limit: int!
-    ): [Category!]!
+        startDate: Date
+        endDate: Date
+        categoryType: CategoryType
+        currentPag: Int!
+        limit: Int!
+    ): CategoryPayload!
 }
 
 type Mutation {
     createCategory(data: createCategoryInput): Category!
     updateCategory(id: ID!, data: updateCategoryInput): Category!
     deleteCategory(id: ID!): Category!
-    deleteManyCategory(ids: [ID!]!): [Category!]!
+    deleteManyCategory(ids: [ID!]!): CategoryPayload!
 }
 
 type Category {
     id: ID!
     name: String!
+    categoryType: CategoryType!
     createdAt: Date!
     creator: User!
+}
+
+type CategoryPayload {
+    nodes: [Category!]!
+    total: Int!
 }
 
 input createCategoryInput {

@@ -14,20 +14,27 @@ const receipt = (parent, { id }, { req }) =>
         });
 
 const receipts = (parent, { currentPag, limit, startDate, endDate, receiptType }, { req }) => {
-    const conditions = { 
-        creator: req.user.id,
+    const conditions = (
+        startDate &&
+        endDate &&
+        receiptType
+    ) ? ({ 
         receiptType,
         createdAt: {
             $gte: startDate,
             $lt: endDate
         }
-    };
+    }) : {};
+    
     const query = {
         skip: limit * (currentPag - 1),
         limit
     };
 
-    return Receipt.find(conditions, {}, query);
+    return Promise.all([
+        Receipt.find({ ...conditions, creator: req.user.id }, {}, query),
+        Receipt.countDocuments({ ...conditions, creator: req.user.id })
+    ]).then(([nodes, total]) => { nodes, total });
 };
 
 const createReceipt = (parent, { data }, { req }) =>
@@ -72,7 +79,7 @@ const deleteManyReceipt = (parent, { ids }, { req }) =>
                 return doc;
             });
 
-            return deletedDocs;
+            return { nodes: deletedDocs, total: deletedDocs.length };
     });
 
 export default {

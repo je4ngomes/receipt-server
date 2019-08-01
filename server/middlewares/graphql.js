@@ -2,6 +2,7 @@ import validate, { validator, isNotValid } from 'validator-handler';
 import { isEmpty, pick } from 'ramda';
 import jwt from 'jsonwebtoken';
 
+import { applyMiddlewareToFields } from '../utils/utils';
 import { InputInvalidError, AuthorizationError } from '../graphql/errors';
 
 const validateUserInput = (resolve, parent, { data }) => {
@@ -9,8 +10,8 @@ const validateUserInput = (resolve, parent, { data }) => {
     const validations = pick(
         keys, 
         { password: [{ error: "Password must be 8 characters or longer.", validator: (x) => x.length >= 8 }],
-          email: [{ error: "Invalid email address", validator: validator.isEmail } ],
-          username: [{ error: "Invalid email address", validator: validator.notEmpty } ],
+          email: [{ error: "Invalid email address", validator: validator.isEmail }],
+          username: [{ error: "Invalid email address", validator: validator.notEmpty }],
           name: [{ error: 'Name is required', validator: validator.notEmpty }] }
     );
     
@@ -58,17 +59,35 @@ const fieldValidations = {
         // signUp: validateUserInput,
         // updateUser: validateUserInput
     }
-
 };
 
-const authRequired = {
-    Query: {
-        me: authenticationRequired
-    },
-    Mutation: {
-        updateUser: authenticationRequired
-    }
-};
+const queriesAuthRequired = [
+    'me',
+    'receipt',
+    'receipts',
+    'category',
+    'categories'
+];
+const mutationsAuthRequired = [
+    'signIn',
+    'signUp',
+    'updateUser',
+    'createReceipt',
+    'updateReceipt',
+    'deleteReceipt',
+    'deleteManyReceipt',
+    'createCategory',
+    'updateCategory',
+    'deleteCategory',
+    'deleteManyCategory'
+];
+
+const authRequired = applyMiddlewareToFields({ 
+        Query: queriesAuthRequired, 
+        Mutation: mutationsAuthRequired 
+    }, 
+    authenticationRequired
+);
 
 export {
     parseJWTFromRequest,

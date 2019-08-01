@@ -14,7 +14,7 @@ import {
     fieldValidations } from './middlewares/graphql';
 
 const { schema: typeDefs, resolvers } = mergeGraphql([{ dir: `${__dirname}/graphql/**/resolvers.js`, type: 'RESOLVERS' },
-                                                      { dir: `${__dirname}/graphql/**/*.graphql`, type: 'TYPES' }])
+                                                      { dir: `${__dirname}/graphql/**/*.gql`, type: 'TYPES' }])
 const port = process.env.PORT || 3000;
 const server = new GraphQLServer({
     typeDefs,
@@ -29,5 +29,7 @@ const server = new GraphQLServer({
 
 server.start(
     { port, formatError },
-    () => console.log(`Listining on port ${port}`)
+    () => console.log(`Listening on port ${port}`)
 );
+
+//https://ultimatecourses.com/blog/graphql-client-side-integration-with-apollo-hooks
