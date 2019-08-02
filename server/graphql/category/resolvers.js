@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { withFilter } from 'graphql-yoga';
 import { NotFound } from '../errors';
 import { GraphQLDate } from 'graphql-iso-date';
 
@@ -7,10 +8,10 @@ const User = mongoose.model('user');
 
 const category = (parent, { id }, { req }) =>
     Category.findOne({ _id: id, creator: req.user.id })
-        .then(category => {
-            if (!category) return new NotFound('Category not found.');
+        .then(doc => {
+            if (!doc) return new NotFound('Category not found.');
 
-            return category;
+            return doc;
         });
 
 const categories = (parent, { currentPag, limit , categoryType }, { req }) => {
@@ -33,26 +34,27 @@ const createCategory = (parent, { data }, { req }) =>
         createdAt: new Date()
     })
         .save()
-        .then(async category => { 
-            await User.updateOne({ _id: req.user.id }, { $push: { categories: category.id } });
+        .then(async doc => { 
+            await User.updateOne({ _id: req.user.id }, { $push: { categories: doc.id } });
 
-            return category;
+            return doc;
         });
 
-const updateCategory = (parent, { id: _id, data }, { req }) => {
+const updateCategory = (parent, { id: _id, data }, { req }) => (
     Category.findOneAndUpdate(
         { _id, creator: req.user.id },
         { $set: { ...data } }, { new: true }
-    );
-};
+    )
+);
 
-const deleteCategory = (parent, { id: _id }, { req }) =>
+const deleteCategory = (parent, { id: _id }, { req }) => (
     Category.findOneAndDelete({ _id, creator: req.user.id })
-        .then(async category => {
+        .then(async doc => {
             await User.updateOne({ _id: req.user.id }, { $pull: { categories: _id } });
-            
-            return category;
-        });
+
+            return doc;
+        })
+);
 
 const deleteManyCategory = (parent, { ids }, { req }) =>
     // Find all matched ids created by logged user

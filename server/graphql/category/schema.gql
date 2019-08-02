@@ -1,11 +1,3 @@
-enum CategoryType {
-    RECEIPT
-    FIXED
-    VARIABLE
-    PERSON
-    PAYMENT_ENTITY
-}
-
 type Query {
     category(id: ID!): Category!
     categories(

@@ -16,7 +16,7 @@ export default (targets) => {
                                   .sort(sortByType)
                                   .map(loadFilesContent);
     return { 
-        schema: mergeTypes(types), 
+        typeDefs: mergeTypes(types), 
         resolvers: mergeResolvers(resolvers)
     };
 };

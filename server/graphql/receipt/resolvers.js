@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { withFilter } from 'graphql-yoga';
 import { NotFound } from '../errors';
 import { GraphQLDate } from 'graphql-iso-date';
 
@@ -44,23 +45,25 @@ const createReceipt = (parent, { data }, { req }) =>
         createdAt: new Date()
     })
         .save()
-        .then(async receipt => { 
-            await User.updateOne({ _id: req.user.id }, { $push: { receipts: receipt.id } });
-            return receipt;
+        .then(async doc => { 
+            await User.updateOne({ _id: req.user.id }, { $push: { receipts: doc.id } });
+            
+            return doc;
         });
 
-const updateReceipt = (parent, { id: _id, data }, { req }) => {
+const updateReceipt = (parent, { id: _id, data }, { req }) => (
     Receipt.findOneAndUpdate(
         { _id, creator: req.user.id },
         { $set: { ...data } }, { new: true }
-    );
-};
+    )
+);
 
 const deleteReceipt = (parent, { id: _id }, { req }) =>
     Receipt.findOneAndDelete({ _id, creator: req.user.id })
-        .then(receipt => {
+        .then(doc => {
             User.updateOne({ _id: req.user.id }, { $pull: { receipts: _id } });
-            return receipt;
+            
+            return doc;
         });
 
 const deleteManyReceipt = (parent, { ids }, { req }) =>

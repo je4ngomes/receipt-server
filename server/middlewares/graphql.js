@@ -89,8 +89,8 @@ const authRequired = applyMiddlewareToFields({
     authenticationRequired
 );
 
-export {
+export default [
     parseJWTFromRequest,
     fieldValidations,
     authRequired
-};
+];

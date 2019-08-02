@@ -1,4 +1,4 @@
-import { GraphQLServer } from 'graphql-yoga';
+import { GraphQLServer, PubSub } from 'graphql-yoga';
 import { formatError } from 'apollo-errors';
 
 // set and load database configuration
@@ -8,23 +8,16 @@ import './models/Category';
 import './models/Receipt';
 
 import mergeGraphql from './utils/mergeGraphql';
-import { 
-    parseJWTFromRequest, 
-    authRequired, 
-    fieldValidations } from './middlewares/graphql';
+import middlewares from './middlewares/graphql';
 
-const { schema: typeDefs, resolvers } = mergeGraphql([{ dir: `${__dirname}/graphql/**/resolvers.js`, type: 'RESOLVERS' },
+const { typeDefs, resolvers } = mergeGraphql([{ dir: `${__dirname}/graphql/**/resolvers.js`, type: 'RESOLVERS' },
                                                       { dir: `${__dirname}/graphql/**/*.gql`, type: 'TYPES' }])
 const port = process.env.PORT || 3000;
 const server = new GraphQLServer({
     typeDefs,
     resolvers,
-    middlewares: [
-        parseJWTFromRequest,
-        authRequired,
-        fieldValidations
-    ],
-    context: req => ({ req })
+    middlewares,
+    context: req => ({ req, pubsub: new PubSub() })
 });
 
 server.start(

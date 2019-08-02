@@ -1,17 +1,3 @@
-scalar Date
-
-enum ReceiptType {
-    RECEIPT
-    FIXED
-    VARIABLE
-    PERSON
-}
-
-enum IsReceiptPaid { 
-    YES 
-    NO 
-}
-
 type Query {
     receipt(id: ID!): Receipt!
     receipts(

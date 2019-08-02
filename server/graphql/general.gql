@@ -1,0 +1,27 @@
+scalar Date
+
+enum CategoryType {
+    RECEIPT
+    FIXED
+    VARIABLE
+    PERSON
+    PAYMENT_ENTITY
+}
+
+enum MutationType {
+    CREATED
+    DELETED
+    UPDATED
+}
+
+enum ReceiptType {
+    RECEIPT
+    FIXED
+    VARIABLE
+    PERSON
+}
+
+enum IsReceiptPaid { 
+    YES 
+    NO 
+}
